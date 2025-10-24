@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS // For Visual Studio
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include <vector>
@@ -12,14 +12,11 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <utility> // For std::pair
+#include <utility>
 
 std::mutex g_data_mutex;
-// --- MODIFICATION 1 ---
-// Store a pair of <prime_number, thread_id>
-std::vector<std::pair<long long, int>> g_all_primes;
 
-// --- Helper Functions ---
+std::vector<std::pair<long long, int>> g_all_primes;
 
 std::string get_timestamp() {
     auto now = std::chrono::system_clock::now();
@@ -55,30 +52,19 @@ std::map<std::string, int> parse_config(const std::string& filename) {
     return config;
 }
 
-// --- MODIFICATION 2 ---
-// The function now accepts the thread_id
 void add_to_results(long long number, int thread_id) {
     std::lock_guard<std::mutex> lock(g_data_mutex);
-    // Add the pair {number, thread_id} to the list
     g_all_primes.push_back({ number, thread_id });
 }
 
-// --- Worker Function ---
-
-/**
- * @brief Worker for Scheme B.II (Interleaved) + A.II (Wait All)
- */
 void find_primes_interleaved_wait(int thread_id, int num_threads, long long max_num) {
     for (long long i = thread_id + 1; i <= max_num; i += num_threads) {
         if (is_prime(i)) {
-            // --- MODIFICATION 3 ---
-            // Pass the thread_id along with the prime number
             add_to_results(i, thread_id);
         }
     }
 }
 
-// --- Main Function (Variant 4) ---
 int main() {
     auto start_time = std::chrono::high_resolution_clock::now();
     std::cout << "--- Program Start (Variant 4 Hybrid: Wait + Interleaved with ID): " << get_timestamp() << " ---" << std::endl;
@@ -98,19 +84,13 @@ int main() {
         t.join();
     }
 
-    // --- Final Printing ---
     std::cout << "\n--- All threads joined. Printing all " << g_all_primes.size() << " found primes: ---" << std::endl;
-
-    // Sort the list based on the first item (the prime number)
     std::sort(g_all_primes.begin(), g_all_primes.end());
 
-    // --- MODIFICATION 4 ---
-    // Loop through the vector of pairs and print both items
     for (const auto& prime_pair : g_all_primes) {
-        std::cout << "Prime: " << prime_pair.first; // The prime number
-        std::cout << " (Found by Thread " << prime_pair.second << ")" << std::endl; // The thread ID
+        std::cout << "Prime: " << prime_pair.first;
+        std::cout << " (Found by Thread " << prime_pair.second << ")" << std::endl;
     }
-
 
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end_time - start_time;
