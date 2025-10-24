@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS // For Visual Studio
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include <vector>
@@ -13,11 +13,8 @@
 #include <iomanip>
 #include <algorithm>
 
-// --- Global Data & Mutex ---
 std::mutex g_data_mutex;
 std::vector<long long> g_all_primes;
-
-// --- Helper Functions ---
 
 std::string get_timestamp() {
     auto now = std::chrono::system_clock::now();
@@ -58,11 +55,6 @@ void add_to_results(long long number) {
     g_all_primes.push_back(number);
 }
 
-// --- Worker Function ---
-
-/**
- * @brief Worker for Scheme B.I (Block) + A.II (Wait All)
- */
 void find_primes_block_wait(int thread_id, long long start, long long end) {
     for (long long i = start; i <= end; ++i) {
         if (is_prime(i)) {
@@ -71,7 +63,6 @@ void find_primes_block_wait(int thread_id, long long start, long long end) {
     }
 }
 
-// --- Main Function (Variant 3) ---
 int main() {
     auto start_time = std::chrono::high_resolution_clock::now();
     std::cout << "--- Program Start (Variant 3: Wait + Block): " << get_timestamp() << " ---" << std::endl;
@@ -94,8 +85,7 @@ int main() {
         t.join();
     }
 
-    // --- Final Printing ---
-    std::cout << "\n--- All threads joined. Printing all " << g_all_primes.size() << " found primes: ---" << std::endl;
+    std::cout << "\n--- All threads have finished. Printing all " << g_all_primes.size() << " found primes: ---" << std::endl;
     std::sort(g_all_primes.begin(), g_all_primes.end());
     for (long long prime : g_all_primes) {
         std::cout << prime << " ";
