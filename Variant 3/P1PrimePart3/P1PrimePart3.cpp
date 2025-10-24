@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // For Visual Studio
 
 #include <iostream>
 #include <vector>
@@ -12,11 +12,12 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <utility>
 
+// --- Global Data & Mutex ---
 std::mutex g_data_mutex;
+std::vector<long long> g_all_primes;
 
-std::vector<std::pair<long long, int>> g_all_primes;
+// --- Helper Functions ---
 
 std::string get_timestamp() {
     auto now = std::chrono::system_clock::now();
@@ -52,22 +53,28 @@ std::map<std::string, int> parse_config(const std::string& filename) {
     return config;
 }
 
-void add_to_results(long long number, int thread_id) {
+void add_to_results(long long number) {
     std::lock_guard<std::mutex> lock(g_data_mutex);
-    g_all_primes.push_back({ number, thread_id });
+    g_all_primes.push_back(number);
 }
 
+// --- Worker Function ---
+
+/**
+ * @brief Worker for Scheme B.I (Block) + A.II (Wait All)
+ */
 void find_primes_block_wait(int thread_id, long long start, long long end) {
     for (long long i = start; i <= end; ++i) {
         if (is_prime(i)) {
-            add_to_results(i, thread_id);
+            add_to_results(i);
         }
     }
 }
 
+// --- Main Function (Variant 3) ---
 int main() {
     auto start_time = std::chrono::high_resolution_clock::now();
-    std::cout << "--- Program Start (Variant 3 Hybrid: Wait + Block with ID): " << get_timestamp() << " ---" << std::endl;
+    std::cout << "--- Program Start (Variant 3: Wait + Block): " << get_timestamp() << " ---" << std::endl;
 
     auto config = parse_config("config.txt");
     int num_threads = config["NUM_THREADS"];
@@ -87,19 +94,19 @@ int main() {
         t.join();
     }
 
+    // --- Final Printing ---
     std::cout << "\n--- All threads joined. Printing all " << g_all_primes.size() << " found primes: ---" << std::endl;
     std::sort(g_all_primes.begin(), g_all_primes.end());
-
-    for (const auto& prime_pair : g_all_primes) {
-        std::cout << "Prime: " << prime_pair.first;
-        std::cout << " (Found by Thread " << prime_pair.second << ")" << std::endl;
+    for (long long prime : g_all_primes) {
+        std::cout << prime << " ";
     }
+    std::cout << std::endl;
+
 
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end_time - start_time;
     std::cout << "\n--- Program End: " << get_timestamp() << " ---" << std::endl;
-    std::cout << "--- Total Execution Time: " << duration.count() << " seconds ---" <<
-        std::endl;
+    std::cout << "--- Total Execution Time: " << duration.count() << " seconds ---" << std::endl;
 
     return 0;
 }
