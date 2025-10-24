@@ -2,13 +2,13 @@
 
 
 
-Variant 1 (A.1 Print immediately + B.1 Division of search range)
+1. Variant 1 (A.1 Print immediately + B.1 Division of search range)
 
-Variant 2 (A.1 Print immediately + B.2 Each threads are for divisibility testing of individual numbers)
+2. Variant 2 (A.1 Print immediately + B.2 Each threads are for divisibility testing of individual numbers)
 
-Variant 3 (A.2 Wait until all threads are done + B.1 Division of search range)
+3. Variant 3 (A.2 Wait until all threads are done + B.1 Division of search range)
 
-Variant 4 (A.2 Wait until all threads are done + B.2 Each threads are for divisibility testing of individual numbers)
+4. Variant 4 (A.2 Wait until all threads are done + B.2 Each threads are for divisibility testing of individual numbers)
 
 
 
