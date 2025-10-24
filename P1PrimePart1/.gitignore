@@ -1,0 +1,21 @@
+# C++ / Visual Studio
+# Ignore the .vs folder, which contains user-specific files and caches
+/.vs/
+
+# Ignore build output folders
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Aa]rm64/
+[Bb]in/
+[Oo]bj/
+
+# Ignore other Visual Studio files
+*.suo
+*.user
+*.ilk
+*.pdb
+*.ipdb
+*.sdf
+*.opendb
+*.VC.db
