@@ -16,14 +16,15 @@
 
 * Click on the specific Variant you want to run
 
-Variant 1 = P1PrimePart1
+1. Variant 1 = P1PrimePart1
 
-Variant 2 = P1PrimePart2
+2. Variant 2 = P1PrimePart2
 
-Variant 3 = P1PrimePart3
+3. Variant 3 = P1PrimePart3
 
-Variant 4 = P1PrimePart4
+4. Variant 4 = P1PrimePart4
 
+* After selecting the specified variant, you may run the code.
 
 
 # To edit the config file.
