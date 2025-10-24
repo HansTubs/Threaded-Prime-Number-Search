@@ -12,9 +12,9 @@
 
 
 
-To run the code
+# To run the code
 
-Click on the specific Variant you want to run
+* Click on the specific Variant you want to run
 
 Variant 1 = P1PrimePart1
 
@@ -26,7 +26,7 @@ Variant 4 = P1PrimePart4
 
 
 
-To edit the config file.
+# To edit the config file.
 
 Open the folder view and open the specific variant and edit the config file as you like
 
