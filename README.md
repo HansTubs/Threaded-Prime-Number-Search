@@ -1,4 +1,4 @@
-# Threaded Prime Number Search  (Title)
+# Threaded Prime Number Search
 
 
 
